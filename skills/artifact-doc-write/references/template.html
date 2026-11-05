@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Document Name</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..600&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Reading document template. Design references are listed in SKILL.md. */
+:root {
+  --paper: #ffffff;
+  --ink: #0a0a0a;
+  --link: var(--ink);
+  --ink-2: #636363;
+  --rule: #e5e5e5;
+  --wash: #f1eeee;
+  --blue: #0a39e5;
+  --sans: "Inter", "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "DM Mono", "Berkeley Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #111111; --ink: #fafafa; --ink-2: #a1a1a1; --rule: #ffffff1a; --wash: #1a1a1a; --blue: #7d93ff; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --paper: #111111; --ink: #fafafa; --ink-2: #a1a1a1; --rule: #ffffff1a; --wash: #1a1a1a; --blue: #7d93ff; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html { scroll-padding-top: 80px; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--sans); font-size: 18px; line-height: 1.65;
+  font-feature-settings: "cv01", "ss03"; -webkit-font-smoothing: antialiased;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+::selection { background: var(--blue); color: #fff; }
+a, a:visited { color: var(--link); text-decoration: none; }
+.doc a, .doc a:visited { text-decoration: underline; text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+.doc a:hover { text-decoration-thickness: 2px; }
+.links a span { text-decoration: underline; text-underline-offset: 0.18em; }
+.doc h2 .anchor, .doc .mobile-toc a { text-decoration: none; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
+a:focus-visible { outline-color: var(--link); }
+.mono, code { font-family: var(--mono); font-size: 0.86em; }
+
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.bar-inner { max-width: 1200px; margin: 0 auto; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.bar-title { font-size: 15px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-title span { color: var(--ink-2); font-weight: 400; }
+.tp-toggle {
+  font: 500 14px var(--sans); color: var(--ink-2); background: none; cursor: pointer; white-space: nowrap;
+  border: 1px solid var(--rule); border-radius: 999px; padding: 6px 14px;
+}
+.tp-toggle:hover { color: var(--ink); }
+.tp-toggle[aria-pressed="true"] { color: var(--paper); background: var(--ink); border-color: var(--ink); }
+
+.layout {
+  max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 56px 120px;
+}
+.rail { position: sticky; top: 96px; align-self: start; }
+.rail { height: calc(100vh - 112px); display: flex; flex-direction: column; font-family: var(--mono); }
+.rail-scroll { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: thin; padding-bottom: 16px; }
+.rail-label, .rail-links p, .rail-previews p { margin: 0 0 12px; font: 400 12px/1.4 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); }
+.rail ol, .mobile-toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; }
+.rail li, .mobile-toc li { margin: 0; padding: 0; }
+.rail ol a, .mobile-toc ol a { display: grid; grid-template-columns: 1.4em 1.8em 1fr; padding: 3px 0; font: 400 13px/1.45 var(--mono); color: var(--ink-2); transition: color 120ms; }
+.rail ol a::before, .mobile-toc ol a::before { content: "\2514"; color: var(--ink-2); opacity: 0.6; }
+.rail ol a:hover, .mobile-toc ol a:hover { color: var(--ink); }
+.rail .n, .mobile-toc .n { color: inherit; opacity: 0.7; }
+.rail ol a[aria-current="true"] { color: var(--ink); font-weight: 500; }
+.rail ol a[aria-current="true"]::before, .rail ol a[aria-current="true"] .n { opacity: 1; color: var(--ink); }
+.progress { margin-top: 24px; display: flex; align-items: center; gap: 10px; font: 400 12px var(--mono); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.meter { position: relative; flex: 1; max-width: 200px; height: 12px; background-image: radial-gradient(circle, var(--ink-2) 0.7px, transparent 0.9px); background-size: 3px 3px; opacity: 0.9; }
+.meter .fill { position: absolute; inset: 0 auto 0 0; width: calc(var(--p, 0) * 1%); background-image: radial-gradient(circle, var(--ink) 1.15px, transparent 1.35px); background-size: 3px 3px; background-color: var(--paper); }
+.readtime { margin: 10px 0 0; font: 400 12px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); }
+.rail-previews { flex: none; margin-top: 12px; padding-top: 16px; border-top: 1px solid var(--rule); display: grid; gap: 6px; }
+.rail-previews p { margin-bottom: 4px; }
+.rail-previews a { display: block; margin-left: -10px; padding: 8px 10px; border-radius: 6px; background: var(--wash); color: var(--ink); font: 500 15px/1.3 var(--sans); }
+.rail-previews a:hover { outline: 1px solid var(--ink-2); }
+.rail-previews small { display: block; font: 400 12px var(--mono); color: var(--ink-2); margin-top: 2px; }
+.rail-links { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--rule); }
+.rail-links p { margin: 16px 0 6px; }
+.rail-links p:first-child { margin-top: 0; }
+.rail-links ul { list-style: none; margin: 0; padding: 0; }
+.rail-links li { margin: 0; padding: 0; }
+.rail-links a { display: block; padding: 3px 0; font: 400 13px/1.45 var(--mono); color: var(--ink-2); }
+.rail-links a::before { content: "\2514\00a0"; opacity: 0.6; }
+.rail-links a:hover { color: var(--ink); }
+.rail-links .mono { margin-right: 6px; font-size: 12px; }
+.rail-links .old { font-size: 12px; color: var(--ink-2); }
+
+.doc { min-width: 0; max-width: 720px; }
+.crumb { font-size: 14px; color: var(--ink-2); margin: 0 0 20px; }
+.crumb a { color: var(--ink-2); }
+h1 { font-family: var(--sans); font-weight: 600; font-size: clamp(38px, 5.5vw, 56px); line-height: 1.04; letter-spacing: -0.035em; margin: 0 0 20px; text-wrap: balance; font-optical-sizing: auto; }
+.lede { font-size: 21px; line-height: 1.5; color: var(--ink-2); margin: 0 0 24px; text-wrap: pretty; }
+.meta { font-size: 14px; color: var(--ink-2); margin: 0; padding-bottom: 40px; border-bottom: 1px solid var(--rule); display: flex; flex-wrap: wrap; gap: 6px 20px; }
+
+section { padding-top: 56px; }
+h2 { font-family: var(--sans); font-weight: 600; font-size: 30px; line-height: 1.15; letter-spacing: -0.025em; margin: 0 0 16px; text-wrap: balance; display: flex; gap: 14px; align-items: baseline; }
+h2 .n { font-family: var(--mono); font-size: 15px; color: var(--ink-2); letter-spacing: 0; min-width: 1.5em; }
+h2 .anchor { font-family: var(--sans); font-size: 18px; color: var(--ink-2); opacity: 0; }
+h2:hover .anchor, .anchor:focus-visible { opacity: 1; }
+h3 { font-size: 18px; font-weight: 600; margin: 28px 0 8px; }
+p { margin: 0 0 16px; text-wrap: pretty; }
+ol, ul { margin: 0 0 20px; padding-left: 1.25em; }
+li { margin-bottom: 8px; padding-left: 4px; }
+li::marker { color: var(--ink-2); }
+strong { font-weight: 600; }
+
+.note { background: var(--wash); border-radius: 8px; padding: 16px 20px; margin: 0 0 20px; font-size: 16px; line-height: 1.6; }
+.note strong { display: block; margin-bottom: 2px; }
+
+.table-wrap { overflow-x: auto; margin: 8px 0 24px; }
+table { border-collapse: collapse; width: 100%; font-size: 16px; line-height: 1.55; }
+th, td { text-align: left; vertical-align: top; padding: 12px 24px 12px 0; border-top: 1px solid var(--rule); }
+th { font-size: 13px; font-weight: 500; color: var(--ink-2); border-top: 0; padding-top: 0; }
+td:first-child { font-weight: 500; white-space: nowrap; }
+
+.tp { display: none; font-size: 15px; color: var(--ink-2); margin: 0 0 16px; padding-left: 14px; border-left: 1px solid var(--blue); }
+body.show-tp .tp { display: block; }
+
+.links { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--rule); }
+.links li { margin: 0; padding: 0; border-bottom: 1px solid var(--rule); }
+.links a { display: flex; justify-content: space-between; align-items: baseline; gap: 6px 16px; flex-wrap: wrap; padding: 14px 0; color: var(--ink); }
+.links a:hover { text-decoration: underline; }
+.links a:hover .l { color: var(--link); }
+.links .d { font-size: 14px; color: var(--ink-2); }
+
+.pager { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 72px; }
+.pager a { background: var(--wash); border-radius: 8px; padding: 16px 20px; color: var(--ink); }
+.pager a:hover { text-decoration: underline; outline: 1px solid var(--rule); }
+.pager small { display: block; font-size: 13px; color: var(--ink-2); }
+.pager .next { text-align: right; grid-column: 2; }
+
+.fig { margin: 28px 0 32px; }
+.fig .scroll { overflow-x: auto; }
+.fig svg { display: block; width: 100%; min-width: 600px; height: auto; color: var(--ink); }
+.fig svg text { font-family: var(--sans); font-size: 15px; fill: currentColor; }
+.fig svg .sub { font-size: 13px; fill: var(--ink-2); }
+.fig svg .box { fill: var(--paper); stroke: var(--ink-2); stroke-width: 1; }
+.fig svg .group { fill: var(--wash); stroke: none; }
+.fig svg .ask { fill: var(--paper); stroke: var(--ink-2); stroke-dasharray: 4 3; }
+.fig svg .hl { fill: var(--paper); stroke: var(--blue); stroke-width: 1.5; }
+.fig svg .hl-text { fill: var(--blue); font-weight: 500; }
+.fig svg .edge { fill: none; stroke: var(--ink-2); stroke-width: 1.25; }
+.fig svg .arrowhead { fill: var(--ink-2); }
+.fig svg a { cursor: pointer; }
+.fig svg a text, .fig svg a .hl-text, .fig svg a .sub { fill: var(--link); text-decoration: underline; text-underline-offset: 0.18em; }
+.fig svg a .hl { stroke: var(--link); }
+.fig svg a:hover .hl { stroke-width: 2.5; }
+.fig svg a:focus-visible .hl { stroke-width: 3; }
+.fig figcaption { font-size: 14px; color: var(--ink-2); margin-top: 10px; }
+
+.mobile-toc { display: none; }
+@media (max-width: 960px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 0; padding-block: 32px 80px; }
+  .rail { display: none; }
+  .mobile-toc { display: block; margin: 24px 0 0; }
+  .mobile-toc summary { cursor: pointer; font: 400 12px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); }
+  .mobile-toc ol { margin-top: 10px; }
+  h2 { font-size: 27px; }
+  .lede { font-size: 19px; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-inner">
+    <div class="bar-title">Document name <span>· status</span></div>
+    <button class="tp-toggle" id="tp-toggle" type="button" aria-pressed="false">Talking points</button>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="rail" aria-label="Chapters">
+    <div class="rail-scroll">
+      <p class="rail-label">Contents</p>
+      <ol id="rail">
+        <li><a href="#one"><span class="n">1</span><span class="t">First chapter</span></a></li>
+        <li><a href="#two"><span class="n">2</span><span class="t">Second chapter</span></a></li>
+      </ol>
+      <div class="progress" aria-hidden="true"><span class="meter" id="meter"><span class="fill"></span></span><span id="pct">00%</span></div>
+      <p class="readtime" id="readtime"></p>
+    </div>
+  </nav>
+
+  <article class="doc">
+    <p class="crumb"><a href="#">Collection</a> / Page</p>
+    <h1>Document name</h1>
+    <p class="lede">One or two sentences that say what this page is and what the reader should get from it.</p>
+    <p class="meta"><span>October 22, 2026</span><span>Draft</span><span>For whom</span></p>
+    <details class="mobile-toc"><summary>Contents</summary><ol><li><a href="#one"><span class="n">1</span><span class="t">First chapter</span></a></li><li><a href="#two"><span class="n">2</span><span class="t">Second chapter</span></a></li></ol></details>
+
+    <section id="one">
+      <h2><span class="n">1</span>First chapter<a class="anchor" href="#one" aria-label="Link to this chapter">#</a></h2>
+      <p>Body text.</p>
+      <p class="tp">Optional talking point.</p>
+    </section>
+
+    <section id="two">
+      <h2><span class="n">2</span>Second chapter<a class="anchor" href="#two" aria-label="Link to this chapter">#</a></h2>
+      <div class="note"><strong>Caveat heading.</strong>Caveat text.</div>
+    </section>
+  </article>
+</div>
+
+<script>
+(function () {
+  const toggle = document.getElementById("tp-toggle");
+  if (toggle) {
+  const apply = (on) => { document.body.classList.toggle("show-tp", on); toggle.setAttribute("aria-pressed", String(on)); };
+  let saved = false;
+  try { saved = localStorage.getItem("show-tp") === "1"; } catch (e) {}
+  apply(saved);
+  toggle.addEventListener("click", () => {
+    const on = !document.body.classList.contains("show-tp");
+    apply(on);
+    try { localStorage.setItem("show-tp", on ? "1" : "0"); } catch (e) {}
+  });
+  }
+  const links = Array.from(document.querySelectorAll("#rail a"));
+  const heads = links.map((a) => document.getElementById(a.getAttribute("href").slice(1))).filter(Boolean);
+  const mark = () => {
+    if (!heads.length) return;
+    const y = window.scrollY + 140;
+    const cur = heads.reduce((acc, h) => (h.offsetTop <= y ? h : acc), heads[0]);
+    links.forEach((a) => a.setAttribute("aria-current", String(a.getAttribute("href") === "#" + cur.id)));
+  };
+  const meter = document.getElementById("meter");
+  const pct = document.getElementById("pct");
+  const progress = () => {
+    if (!meter || !pct) return;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const p = max > 0 ? Math.min(100, Math.round((window.scrollY / max) * 100)) : 100;
+    meter.style.setProperty("--p", p);
+    pct.textContent = String(p).padStart(2, "0") + "%";
+  };
+  const doc = document.querySelector(".doc");
+  const readtime = document.getElementById("readtime");
+  if (doc && readtime) {
+    const words = doc.innerText.trim().split(/\s+/).length;
+    readtime.textContent = Math.max(1, Math.round(words / 230)) + " min read";
+  }
+  window.addEventListener("scroll", () => { mark(); progress(); }, { passive: true });
+  window.addEventListener("resize", progress);
+  mark();
+  progress();
+})();
+</script>
+
+</body>
+</html>
